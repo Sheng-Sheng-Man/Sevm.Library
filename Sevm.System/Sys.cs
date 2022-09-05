@@ -12,7 +12,7 @@ namespace Sevm.Library {
         /// <param name="args"></param>
         /// <returns></returns>
         [Script("获取系统运行毫秒数")]
-        public static Sevm.Engine.Memory.Value GetTickCount(Params args) {
+        public static Sevm.MemoryPtr GetTickCount(NativeFunctionArgs args) {
             return Environment.TickCount;
         }
 

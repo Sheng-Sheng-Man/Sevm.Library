@@ -12,9 +12,9 @@ namespace Sevm.Library {
         /// <param name="args"></param>
         /// <returns></returns>
         [Script("他说")]
-        public static Sevm.Engine.Memory.Value Say(Params args) {
-            Sevm.Engine.Memory.Object obj = (Sevm.Engine.Memory.Object)args[0];
-            System.Console.WriteLine(obj.ValueList[0].ToString());
+        public static Sevm.MemoryPtr Say(NativeFunctionArgs e) {
+            Sevm.MemoryObject obj = e.Params[0].GetObject(e.Memory);
+            System.Console.WriteLine(obj.Values.GetItemContent(0).GetString());
             return 0;
         }
 
@@ -24,15 +24,12 @@ namespace Sevm.Library {
         /// <param name="args"></param>
         /// <returns></returns>
         [Script("控制台输出")]
-        public static Sevm.Engine.Memory.Value Write(Params args) {
-            Sevm.Engine.Memory.Object obj = (Sevm.Engine.Memory.Object)args[0];
-            //for (int i = 0; i < obj.KeyList.Count; i++) {
-            //    Console.WriteLine($"{obj.KeyList[i].ToString()}={obj.ValueList[i].ToString()}");
-            //}
+        public static Sevm.MemoryPtr Write(NativeFunctionArgs e) {
+            Sevm.MemoryObject obj = e.Params[0].GetObject(e.Memory);
             if (obj.ContainsKey("内容")) {
-                System.Console.Write(obj["内容"].ToString());
+                System.Console.Write(obj.GetKeyValue("内容").GetString());
             } else {
-                System.Console.Write(obj.ValueList[0].ToString());
+                System.Console.Write(obj.Values.GetItemContent(0).GetString());
             }
             return 0;
         }
@@ -43,16 +40,16 @@ namespace Sevm.Library {
         /// <param name="args"></param>
         /// <returns></returns>
         [Script("控制台换行输出")]
-        public static Sevm.Engine.Memory.Value WriteLine(Params args) {
-            if (args.Count == 0) {
+        public static Sevm.MemoryPtr WriteLine(NativeFunctionArgs e) {
+            if (e.Params.Count == 0) {
                 System.Console.WriteLine();
                 return 0;
             }
-            Sevm.Engine.Memory.Object obj = (Sevm.Engine.Memory.Object)args[0];
+            Sevm.MemoryObject obj = e.Params[0].GetObject(e.Memory);
             if (obj.ContainsKey("内容")) {
-                System.Console.WriteLine(obj["内容"].ToString());
+                System.Console.WriteLine(obj.GetKeyValue("内容").GetString());
             } else {
-                System.Console.WriteLine(obj.ValueList[0].ToString());
+                System.Console.WriteLine(obj.Values.GetItemContent(0).GetString());
             }
             return 0;
         }
@@ -63,8 +60,8 @@ namespace Sevm.Library {
         /// <param name="args"></param>
         /// <returns></returns>
         [Script("控制台读取数字")]
-        public static Sevm.Engine.Memory.Value ReadNumber(Params args) {
-            return double.Parse(System.Console.ReadLine());
+        public static Sevm.MemoryPtr ReadNumber(NativeFunctionArgs e) {
+            return e.Memory.CreateDouble(double.Parse(System.Console.ReadLine()));
         }
 
     }
